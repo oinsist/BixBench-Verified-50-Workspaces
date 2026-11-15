@@ -1,0 +1,5 @@
+{
+  "id": "bix-54-q7",
+  "question": "What is the maximum colony area predicted at the optimal frequency (proportion of strain 287 in the mixtures) according to the best-fitting model among quadratic, cubic and natural spline (df=4) models? Use R for model fitting.",
+  "capsule": "9e52daf6-ca58-43e8-e732-fbac3459d295"
+}

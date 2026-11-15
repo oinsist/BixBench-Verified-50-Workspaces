@@ -1,0 +1,14 @@
+BixBench-Verified-50 Workspaces
+
+Question and data source: phylobio/BixBench-Verified-50
+(previously yuanhaoqu/BixBench-Verified-50)
+https://huggingface.co/datasets/phylobio/BixBench-Verified-50
+Dataset license declared by the upstream dataset: Apache-2.0.
+Based on BixBench: https://huggingface.co/datasets/futurehouse/BixBench
+
+Changes: question-only workspace templates; CapsuleData-only repackaging;
+SHA-256 integrity metadata; preparation scripts and Chinese usage documentation.
+Original question wording and raw data contents are retained.
+Dataset revision observed when preparing the release: c77fc8ea4611b546947b8a4710ed36ab72ee233c
+
+Individual data files may contain their own attribution or notices.

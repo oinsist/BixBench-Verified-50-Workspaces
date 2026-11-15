@@ -1,0 +1,5 @@
+{
+  "id": "bix-49-q4",
+  "question": "What is the total number of significantly differentially expressed genes (padj < 0.05) when performing DESeq2 differential gene expression analysis with apeglm LFC shrinkage, comparing ASXL1 mutation (disease) vs control, while controlling for sex as a covariate?",
+  "capsule": "4ef3fcd8-1c35-466f-9d93-49b92f4ea760"
+}

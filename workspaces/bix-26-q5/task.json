@@ -1,0 +1,5 @@
+{
+  "id": "bix-26-q5",
+  "question": "In P. aeruginosa KEGG pathway enrichment analysis, how many pathways are significantly enriched under iron-depleted conditions but show no significant enrichment under innate media conditions? Perform KEGG pathway enrichment analysis using genes with |log2FoldChange| > 1.5 and adjusted p-value < 0.05. Consider pathways significantly enriched if their enrichment adjusted p-value < 0.05.",
+  "capsule": "0923d260-fe1b-4fb4-4398-79edf546e584"
+}

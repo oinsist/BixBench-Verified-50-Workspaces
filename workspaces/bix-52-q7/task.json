@@ -1,0 +1,5 @@
+{
+  "id": "bix-52-q7",
+  "question": "How many individual methylation measurements (rows) are removed when filtering out measurements that do not show >90% or <10% methylation in the Zebra Finch dataset?",
+  "capsule": "4dceea58-7d66-4576-bfc6-88c026d5b7a9"
+}

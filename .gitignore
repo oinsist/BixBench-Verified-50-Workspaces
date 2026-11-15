@@ -1,0 +1,14 @@
+.venv/
+.cache/
+runs/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+.env.*
+workspaces/*/data/*
+!workspaces/*/data/.gitkeep
+workspaces/*/analysis/*
+!workspaces/*/analysis/.gitkeep
+workspaces/*/outputs/*
+!workspaces/*/outputs/.gitkeep

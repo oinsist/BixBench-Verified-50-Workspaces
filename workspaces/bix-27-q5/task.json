@@ -1,0 +1,5 @@
+{
+  "id": "bix-27-q5",
+  "question": "After performing principal component analysis (PCA) with 100 components on the log10-transformed gene expression matrix (with pseudocount of 1, samples as rows and genes as columns), what percentage of the total variance in the dataset is explained by the first principal component (reported as a percentage between 0 and 100)?",
+  "capsule": "0f14ffa7-f02a-4d20-8142-dfc404195e56"
+}

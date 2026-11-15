@@ -1,0 +1,5 @@
+{
+  "id": "bix-32-q2",
+  "question": "Using KEGG over-representation analysis (ORA), how many pathways are significantly enriched (absolute value of lfc > 1.5) in the same direction for all three mutant strains (97, 98, and 99), relative to wildtype?",
+  "capsule": "a94b7008-bb9a-4a46-ebfb-4afdfdd299d5"
+}
