@@ -1,9 +1,12 @@
 """覆盖损坏数据、路径穿越及已有结果保护。"""
 import hashlib
+import http.client
+import io
 import importlib.util
 import tempfile
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 import zipfile
 
 spec = importlib.util.spec_from_file_location('prepare', Path(__file__).resolve().parents[1] / 'prepare.py')
@@ -12,6 +15,22 @@ spec.loader.exec_module(prepare)
 
 
 class PrepareTests(unittest.TestCase):
+    def test_interrupted_download_retries_and_verifies(self):
+        class InterruptedResponse(io.BytesIO):
+            def read(self, size=-1):
+                raise http.client.IncompleteRead(b'bad')
+
+        with tempfile.TemporaryDirectory() as name:
+            cache = Path(name)
+            data = b'complete archive'
+            capsule = {'asset': 'test.zip', 'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
+            responses = [InterruptedResponse(), io.BytesIO(data)]
+            with patch.object(prepare.urllib.request, 'urlopen', side_effect=responses) as request, patch.object(prepare.time, 'sleep'):
+                path = prepare.get_archive(capsule, {'repository': 'test/repo', 'release': 'v1'}, cache, None)
+            self.assertEqual(path.read_bytes(), data)
+            self.assertEqual(request.call_count, 2)
+            self.assertEqual(list(cache.iterdir()), [path])
+
     def test_valid_archive_and_no_overwrite(self):
         with tempfile.TemporaryDirectory() as name:
             root = Path(name)

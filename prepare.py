@@ -2,6 +2,7 @@
 """准备一个或全部分析工作区，支持全新目录及校验。仅依赖 Python 标准库。"""
 import argparse
 import hashlib
+import http.client
 import json
 import os
 from pathlib import Path, PurePosixPath
@@ -10,6 +11,7 @@ import stat
 import subprocess
 import sys
 import tempfile
+import time
 import urllib.request
 import venv
 import zipfile
@@ -47,12 +49,24 @@ def get_archive(capsule, manifest, cache, assets):
     temp = Path(temp_name)
     try:
         print(f'下载 {capsule["asset"]}', flush=True)
-        with os.fdopen(fd, 'wb') as output:
-            request = urllib.request.Request(url, headers={'User-Agent': 'BixBench-Workspaces/1'})
-            with urllib.request.urlopen(request, timeout=120) as response:
-                shutil.copyfileobj(response, output, 1024 * 1024)
-        if temp.stat().st_size != capsule['bytes'] or sha256(temp) != capsule['sha256']:
-            raise ValueError(f'下载校验失败：{capsule["asset"]}')
+        os.close(fd)
+        for attempt in range(3):
+            try:
+                request = urllib.request.Request(url, headers={'User-Agent': 'BixBench-Workspaces/1'})
+                with temp.open('wb') as output, urllib.request.urlopen(request, timeout=120) as response:
+                    try:
+                        shutil.copyfileobj(response, output, 1024 * 1024)
+                    except http.client.IncompleteRead as exc:
+                        # 某些代理缺少结束帧；只有完整大小和 SHA-256 都匹配才接受。
+                        output.write(exc.partial)
+                if temp.stat().st_size != capsule['bytes'] or sha256(temp) != capsule['sha256']:
+                    raise ValueError(f'下载校验失败：{capsule["asset"]}')
+                break
+            except (OSError, ValueError, http.client.HTTPException):
+                if attempt == 2:
+                    raise
+                print(f'下载中断或校验失败，重试 {attempt + 1}/2', flush=True)
+                time.sleep(attempt + 1)
         temp.replace(path)
     finally:
         temp.unlink(missing_ok=True)
@@ -164,6 +178,6 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except (OSError, ValueError, zipfile.BadZipFile, subprocess.CalledProcessError) as exc:
+    except (OSError, ValueError, http.client.HTTPException, zipfile.BadZipFile, subprocess.CalledProcessError) as exc:
         print(f'准备失败：{exc}', file=sys.stderr)
         sys.exit(1)
